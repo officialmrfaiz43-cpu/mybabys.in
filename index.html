@@ -1,29 +1,3 @@
-import json
-import os
-import webbrowser
-
-print("Bhai, Google Login Interface ke sath website taiyar ho rahi hai...")
-
-# EXACT DUAL-LANGUAGE DATABASE
-database = {
-    "hindu": {
-        "boy": [{"n": "Aarav (आरव)", "m": "Peaceful (शांत)"}, {"n": "Vihaan (विहान)", "m": "Dawn, Morning (सुबह)"}, {"n": "Aditya (आदित्य)", "m": "The Sun (सूर्य)"}],
-        "girl": [{"n": "Aadhya (आध्या)", "m": "First Power (प्रथम शक्ति)"}, {"n": "Kiara (कियारा)", "m": "Little dark one (गहरी और सुंदर)"}, {"n": "Diya (दिया)", "m": "Light, Lamp (रोशनी)"}]
-    },
-    "muslim": {
-        "boy": [{"n": "Ayaan (أيان)", "m": "Gift of God (अल्लाह का तोहफा)"}, {"n": "Zayn (زين)", "m": "Beauty, Grace (खूबसूरती)"}, {"n": "Rehan (ريحان)", "m": "Scented, Fragrant (सुगंधित)"}],
-        "girl": [{"n": "Zara (زهرة)", "m": "Blooming Flower (खिलता हुआ फूल)"}, {"n": "Fatima (فاطمة)", "m": "Captivating (आकर्षक)"}, {"n": "Inaya (عناية)", "m": "Concern, Solicitude (परवाह)"}]
-    },
-    "christian": {
-        "boy": [{"n": "Ethan", "m": "Strong, Firm"}, {"n": "Liam", "m": "Strong-willed warrior"}],
-        "girl": [{"n": "Sophia", "m": "Wisdom"}, {"n": "Olivia", "m": "Olive Tree"}]
-    },
-    "modern": {
-        "boy": [{"n": "Aryan (आर्यन)", "m": "Noble (कुलीन)"}, {"n": "Zian (ज़ियान)", "m": "Self-peace (आत्म-शांति)"}],
-        "girl": [{"n": "Ria (रिया)", "m": "Singer (गायिका)"}, {"n": "Sia (सिया)", "m": "Moving (गतिशील)"}]
-    }
-}
-
 html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
