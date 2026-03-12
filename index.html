@@ -6,46 +6,71 @@
     <title>Baby Name Generator | mybabys.in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; padding-top: 50px; }
-        .card { border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .btn-custom { background-color: #4a90e2; color: white; font-weight: bold; }
-        .btn-custom:hover { background-color: #357abd; color: white; }
-        .result-box { margin-top: 20px; font-size: 1.5em; font-weight: bold; color: #198754; }
+        body { background-color: #f8f9fa; padding: 20px; font-family: sans-serif; }
+        .main-container { max-width: 500px; margin: auto; }
+        .card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; background: white; margin-bottom: 20px; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .login-btn { background-color: #4a90e2; color: white; border-radius: 20px; padding: 5px 15px; border: none; font-size: 14px;}
+        .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-search { background-color: #343a40; color: white; border: none; }
+        .form-control, .form-select { margin-bottom: 15px; border-radius: 8px; }
+        .btn-generate { background-color: #5b8cd9; color: white; width: 100%; border-radius: 8px; padding: 10px; font-weight: bold; border: none; }
+        .result-box { text-align: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; color: #28a745; }
+        .watchlist-header { display: flex; justify-content: space-between; align-items: center; }
+        .clear-btn { background-color: #adb5bd; color: white; border: none; border-radius: 5px; padding: 2px 10px; font-size: 12px; }
+        .watchlist-title { color: #dc3545; font-weight: bold; margin: 0; }
     </style>
 </head>
 <body>
 
-<div class="container d-flex justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4 text-center">
-            <h3 class="mb-4">👶 NameGen</h3>
-            
-            <div class="row g-2 mb-3">
-                <div class="col-md-6">
-                    <select id="religion" class="form-select">
-                        <option value="hindu">Hindu</option>
-                        <option value="muslim">Muslim</option>
-                        <option value="christian">Christian</option>
-                        <option value="modern">Modern</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <select id="gender" class="form-select">
-                        <option value="boy">Boy</option>
-                        <option value="girl">Girl</option>
-                    </select>
-                </div>
+<div class="main-container">
+    
+    <div class="card">
+        <div class="header-flex">
+            <h4 style="margin:0; font-weight: bold;">👶 NameGen</h4>
+            <button class="login-btn">Login</button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="form-control" style="margin-bottom:0;" placeholder="Search a specific name...">
+            <button class="btn btn-search">🔍 Search</button>
+        </div>
+
+        <input type="text" class="form-control" placeholder="Father's Name">
+        <input type="text" class="form-control" placeholder="Mother's Name">
+
+        <div class="row g-2">
+            <div class="col-6">
+                <select id="religion" class="form-select">
+                    <option value="hindu">Hindu</option>
+                    <option value="muslim">Muslim</option>
+                    <option value="christian">Christian</option>
+                    <option value="modern">Modern</option>
+                </select>
             </div>
+            <div class="col-6">
+                <select id="gender" class="form-select">
+                    <option value="boy">Boy</option>
+                    <option value="girl">Girl</option>
+                </select>
+            </div>
+        </div>
 
-            <button onclick="generateName()" class="btn btn-custom w-100 py-2">✨ Generate Name</button>
+        <button onclick="generateName()" class="btn-generate">✨ Generate Name</button>
+        
+        <div id="result" class="result-box"></div>
+    </div>
 
-            <div id="result" class="result-box"></div>
+    <div class="card">
+        <div class="watchlist-header">
+            <h5 class="watchlist-title">❤️ My Watchlist</h5>
+            <button class="clear-btn">Clear All</button>
         </div>
     </div>
+
 </div>
 
 <script>
-    // Yahan humne aapka database JavaScript mein daal diya hai
     const nameDatabase = {
         "hindu": {
             "boy": ["Aarav (आरव) - Peaceful", "Vihaan (विहान) - Dawn", "Aditya (आदित्य) - The Sun"],
@@ -66,18 +91,13 @@
     };
 
     function generateName() {
-        // Dropdown se value uthana
         let religion = document.getElementById("religion").value;
         let gender = document.getElementById("gender").value;
         
-        // Database se list nikalna
         let namesList = nameDatabase[religion][gender];
-        
-        // List mein se random naam nikalna
         let randomIndex = Math.floor(Math.random() * namesList.length);
         let selectedName = namesList[randomIndex];
         
-        // Screen par dikhana
         document.getElementById("result").innerHTML = selectedName;
     }
 </script>
