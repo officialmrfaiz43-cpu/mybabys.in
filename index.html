@@ -1,231 +1,86 @@
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Baby Name Generator PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Name Generator | mybabys.in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fdfbfb; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px;}
-       
-        /* HEADER & LOGIN BAR */
-        .top-bar { width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box;}
-        .logo-text { font-weight: bold; color: #2c3e50; font-size: 1.2rem; }
-        .login-btn { background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .login-btn:hover { background: #2980b9; }
-       
-        .user-profile { display: none; align-items: center; gap: 10px; }
-        .user-avatar { width: 35px; height: 35px; background: #27ae60; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; }
-        .logout-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 0.8rem;}
-
-        /* MAIN CONTAINER */
-        .container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; border-top: 5px solid #3498db; margin-bottom: 20px; box-sizing: border-box;}
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;}
-        button.btn { width: 100%; background: #3498db; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 10px; transition: 0.3s;}
-        button.btn:hover { background: #2980b9; }
-       
-        /* Search Box */
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ecf0f1; padding-bottom: 20px; }
-        .search-box input { margin: 0; }
-        .search-box button { margin: 0; width: 40%; background: #2c3e50; padding: 12px; font-size: 16px; }
-       
-        #resultArea { display: none; margin-top: 25px; padding: 20px; background: #e8f6fd; border-radius: 10px; border: 2px dashed #bde0fe;}
-        h2 { color: #2c3e50; margin: 0; font-size: 2.2rem; font-weight: 800;}
-        p.meaning { color: #e67e22; font-style: italic; font-size: 1.2rem; margin-top: 10px; font-weight: bold;}
-        .save-btn { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; display: inline-flex; align-items: center; gap: 5px;}
-
-        /* Watchlist Area */
-        .watchlist-container { background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: left; margin-bottom: 30px; box-sizing: border-box;}
-        .watchlist-title { color: #e74c3c; font-size: 1.5rem; margin-top: 0; border-bottom: 2px solid #fce4e4; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
-        .clear-btn { font-size: 0.8rem; background: #95a5a6; padding: 5px 10px; border-radius: 5px; color: white; cursor: pointer; border: none;}
-        #favList { list-style: none; padding: 0; margin: 0; }
-        #favList li { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #3498db; display: flex; flex-direction: column; position: relative;}
-        .fav-name { font-weight: bold; color: #2c3e50; font-size: 1.1rem; }
-        .fav-mean { font-size: 0.9rem; color: #7f8c8d; font-style: italic; margin-top: 5px; }
-        .delete-btn { position: absolute; right: 15px; top: 15px; color: #e74c3c; cursor: pointer; font-weight: bold; border: none; background: none; font-size: 1.2rem;}
-
-        /* MODAL (POPUP) FOR GOOGLE LOGIN */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 90%; max-width: 350px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;}
-        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.5rem; color: #7f8c8d; border: none; background: none;}
-        .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; background: white; border: 1px solid #dadce0; color: #3c4043; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px; transition: background 0.3s;}
-        .google-btn:hover { background: #f8f9fa; }
-        .google-icon { width: 24px; height: 24px; }
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .card { border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .btn-custom { background-color: #4a90e2; color: white; font-weight: bold; }
+        .btn-custom:hover { background-color: #357abd; color: white; }
+        .result-box { margin-top: 20px; font-size: 1.5em; font-weight: bold; color: #198754; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="logo-text">👶 NameGen</div>
-        <button id="loginBtnUI" class="login-btn" onclick="openLoginModal()">Login</button>
-       
-        <div id="userProfileUI" class="user-profile">
-            <span id="welcomeText" style="font-weight: bold; color: #2c3e50;"></span>
-            <div class="user-avatar" id="userAvatar">F</div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+<div class="container d-flex justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 text-center">
+            <h3 class="mb-4">👶 NameGen</h3>
+            
+            <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                    <select id="religion" class="form-select">
+                        <option value="hindu">Hindu</option>
+                        <option value="muslim">Muslim</option>
+                        <option value="christian">Christian</option>
+                        <option value="modern">Modern</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <select id="gender" class="form-select">
+                        <option value="boy">Boy</option>
+                        <option value="girl">Girl</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="generateName()" class="btn btn-custom w-100 py-2">✨ Generate Name</button>
+
+            <div id="result" class="result-box"></div>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search a specific name...">
-            <button class="btn" onclick="searchName()">🔍 Search</button>
-        </div>
-       
-        <input type="text" id="father" placeholder="Father's Name">
-        <input type="text" id="mother" placeholder="Mother's Name">
-        <div style="display: flex; gap: 10px;">
-            <select id="religion"><option value="hindu">Hindu</option><option value="muslim">Muslim</option><option value="christian">Christian</option><option value="modern">Modern</option></select>
-            <select id="gender"><option value="boy">Boy</option><option value="girl">Girl</option></select>
-        </div>
-        <button class="btn" onclick="generate()">✨ Generate Name</button>
-
-        <div id="resultArea">
-            <div style="font-size: 0.9rem; color: #7f8c8d;">SUGGESTED NAME</div>
-            <h2 id="cName">---</h2>
-            <p class="meaning" id="cMeaning">---</p>
-            <button class="save-btn" onclick="saveToWatchlist()">❤️ Save to Watchlist</button>
-        </div>
-    </div>
-
-    <div class="watchlist-container">
-        <h3 class="watchlist-title"><span>❤️ My Watchlist</span><button class="clear-btn" onclick="clearAll()">Clear All</button></h3>
-        <ul id="favList"></ul>
-    </div>
-
-    <div id="loginModal" class="modal-overlay">
-        <div class="login-box">
-            <button class="close-modal" onclick="closeLoginModal()">×</button>
-            <h2 style="color: #2c3e50; font-size: 1.8rem; margin-bottom: 5px;">Welcome Back</h2>
-            <p style="color: #7f8c8d; margin-top: 0; font-size: 0.9rem;">Sign in to sync your watchlist</p>
-           
-            <button class="google-btn" onclick="simulateGoogleLogin()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-icon" alt="Google">
-                Sign in with Google
-            </button>
-        </div>
-    </div>
-
-    <script>
-        const myNameDatabase = """ + json.dumps(database, ensure_ascii=False) + """;
-       
-        // --- AUTHENTICATION LOGIC ---
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-       
-        function simulateGoogleLogin() {
-            // Simulated login process
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', 'Faizmohmad');
-           
-            closeLoginModal();
-            updateAuthUI();
+<script>
+    // Yahan humne aapka database JavaScript mein daal diya hai
+    const nameDatabase = {
+        "hindu": {
+            "boy": ["Aarav (आरव) - Peaceful", "Vihaan (विहान) - Dawn", "Aditya (आदित्य) - The Sun"],
+            "girl": ["Aadhya (आध्या) - First Power", "Kiara (कियारा) - Little dark one", "Diya (दिया) - Light"]
+        },
+        "muslim": {
+            "boy": ["Ayaan (ایان) - Gift of God", "Zayn (زین) - Beauty, Grace", "Rehan (ریحان) - Scented"],
+            "girl": ["Zara (زہرا) - Blooming Flower", "Fatima (فاطمہ) - Captivating", "Inaya (عنایہ) - Concern"]
+        },
+        "christian": {
+            "boy": ["Ethan - Strong, Firm", "Liam - Strong-willed warrior"],
+            "girl": ["Sophia - Wisdom", "Olivia - Olive Tree"]
+        },
+        "modern": {
+            "boy": ["Aryan (आर्यन) - Noble", "Zian (ज़ियान) - Self-peace"],
+            "girl": ["Ria (रिया) - Singer", "Sia (सिया) - Moving"]
         }
+    };
 
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userName');
-            updateAuthUI();
-        }
+    function generateName() {
+        // Dropdown se value uthana
+        let religion = document.getElementById("religion").value;
+        let gender = document.getElementById("gender").value;
+        
+        // Database se list nikalna
+        let namesList = nameDatabase[religion][gender];
+        
+        // List mein se random naam nikalna
+        let randomIndex = Math.floor(Math.random() * namesList.length);
+        let selectedName = namesList[randomIndex];
+        
+        // Screen par dikhana
+        document.getElementById("result").innerHTML = selectedName;
+    }
+</script>
 
-        function updateAuthUI() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userName = localStorage.getItem('userName');
-
-            if(isLoggedIn) {
-                document.getElementById('loginBtnUI').style.display = 'none';
-                document.getElementById('userProfileUI').style.display = 'flex';
-                document.getElementById('welcomeText').innerText = "Hi, " + userName;
-                document.getElementById('userAvatar').innerText = userName.charAt(0).toUpperCase();
-            } else {
-                document.getElementById('loginBtnUI').style.display = 'block';
-                document.getElementById('userProfileUI').style.display = 'none';
-            }
-        }
-
-        // --- GENERATOR & SEARCH LOGIC ---
-        function generate() {
-            const f = document.getElementById('father').value;
-            const m = document.getElementById('mother').value;
-            if(!f || !m) { alert("Please enter both parents' names!"); return; }
-            const r = document.getElementById('religion').value;
-            const g = document.getElementById('gender').value;
-            const list = myNameDatabase[r][g];
-            const random = list[Math.floor(Math.random() * list.length)];
-            showResult(random.n, random.m);
-        }
-
-        function searchName() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            if(!query) { alert("Please type a name to search!"); return; }
-            let foundName = null, foundMeaning = null;
-            for (let rel in myNameDatabase) {
-                for (let gen in myNameDatabase[rel]) {
-                    for (let item of myNameDatabase[rel][gen]) {
-                        if (item.n.toLowerCase().includes(query)) {
-                            foundName = item.n; foundMeaning = item.m; break;
-                        }
-                    }
-                }
-            }
-            if(foundName) showResult(foundName, foundMeaning);
-            else alert("Sorry, this name is not in our current database.");
-        }
-
-        function showResult(name, meaning) {
-            document.getElementById('cName').innerText = name;
-            document.getElementById('cMeaning').innerText = "Meaning: " + meaning;
-            document.getElementById('resultArea').style.display = 'block';
-        }
-
-        // --- WATCHLIST LOGIC ---
-        let watchlist = JSON.parse(localStorage.getItem('babyFavs')) || [];
-        function saveToWatchlist() {
-            // Check if user is logged in before saving
-            if(localStorage.getItem('isLoggedIn') !== 'true') {
-                alert("Please Login with Google first to save names!");
-                openLoginModal();
-                return;
-            }
-
-            const name = document.getElementById('cName').innerText;
-            const meaning = document.getElementById('cMeaning').innerText;
-            if(watchlist.find(item => item.n === name)) { alert("Already in your watchlist!"); return; }
-            watchlist.push({n: name, m: meaning});
-            localStorage.setItem('babyFavs', JSON.stringify(watchlist));
-            renderWatchlist();
-        }
-
-        function renderWatchlist() {
-            const list = document.getElementById('favList');
-            list.innerHTML = '';
-            if(watchlist.length === 0) { list.innerHTML = "<p style='color:#bdc3c7; text-align:center;'>Your watchlist is empty.</p>"; return; }
-            watchlist.forEach((item, index) => {
-                list.innerHTML += `<li><span class="fav-name">${item.n}</span><span class="fav-mean">${item.m}</span><button class="delete-btn" onclick="deleteFav(${index})">×</button></li>`;
-            });
-        }
-
-        function deleteFav(index) {
-            watchlist.splice(index, 1);
-            localStorage.setItem('babyFavs', JSON.stringify(watchlist));
-            renderWatchlist();
-        }
-
-        function clearAll() {
-            if(confirm("Clear your entire watchlist?")) { watchlist = []; localStorage.removeItem('babyFavs'); renderWatchlist(); }
-        }
-
-        // Initialize UI on page load
-        window.onload = function() {
-            updateAuthUI();
-            renderWatchlist();
-        };
-
-    </script>
 </body>
-</html>"""
-
-file_name = "AutoOpenWebsite.html"
-with open(file_name, "w", encoding="utf-8") as file:
-    file.write(html_content)
-
-full_path = os.path.abspath(file_name)
-webbrowser.open('file://' + full_path)
+</html>
