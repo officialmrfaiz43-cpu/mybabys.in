@@ -16,20 +16,22 @@
         .form-control, .form-select { margin-bottom: 15px; border-radius: 8px; }
         .btn-generate { background-color: #5b8cd9; color: white; width: 100%; border-radius: 8px; padding: 10px; font-weight: bold; border: none; }
         
-        /* Result aur Watchlist ke naye style */
         .result-box { text-align: center; margin-top: 20px; }
-        .name-text { font-size: 1.8em; font-weight: bold; color: #198754; }
-        .meaning-text { font-size: 1em; color: #6c757d; margin-bottom: 10px; }
-        .btn-save { background-color: #ff4757; color: white; border: none; border-radius: 8px; padding: 5px 15px; font-size: 14px; display: none; margin: auto; }
+        .name-container { border: 1px dashed #ced4da; border-radius: 10px; padding: 12px; background-color: #fff; margin-bottom: 10px; cursor: pointer; transition: 0.2s;}
+        .name-container:hover { background-color: #f1f8ff; border-color: #4a90e2; }
+        .name-text { font-size: 1.5em; font-weight: bold; color: #198754; margin-bottom: 2px; }
         
         .watchlist-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
         .clear-btn { background-color: #adb5bd; color: white; border: none; border-radius: 5px; padding: 2px 10px; font-size: 12px; }
         .watchlist-title { color: #dc3545; font-weight: bold; margin: 0; }
         .watchlist-item { padding: 8px 0; border-bottom: 1px dashed #ccc; font-size: 14px; }
         
-        /* Affiliate Box Style */
         .affiliate-box { text-align: center; border: 2px solid #ff9f43; background-color: #fff9f2; }
         .affiliate-link { color: #d63384; font-weight: bold; text-decoration: none; border: 1px solid #d63384; padding: 10px; border-radius: 8px; display: block; background-color: white;}
+        
+        .trending-title { color: #ff9f43; font-weight: bold; margin-bottom: 15px; text-align: center;}
+        .trending-list { list-style: none; padding: 0; font-size: 14px; text-align: left; }
+        .trending-list li { padding: 5px 0; border-bottom: 1px solid #f1f1f1; }
     </style>
 </head>
 <body>
@@ -43,12 +45,19 @@
         </div>
 
         <div class="search-box">
-            <input type="text" class="form-control" style="margin-bottom:0;" placeholder="Search a specific name...">
-            <button class="btn btn-search">🔍 Search</button>
+            <input type="text" id="searchInput" class="form-control" style="margin-bottom:0;" placeholder="Search a specific name...">
+            <button class="btn btn-search" onclick="searchName()">🔍 Search</button>
         </div>
 
-        <input type="text" class="form-control" placeholder="Father's Name">
-        <input type="text" class="form-control" placeholder="Mother's Name">
+        <input type="text" id="fatherName" class="form-control" placeholder="Father's Name">
+        <input type="text" id="motherName" class="form-control" placeholder="Mother's Name">
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="combineCheck">
+            <label class="form-check-label text-muted" for="combineCheck" style="font-size: 14px;">
+                Combine Parent Names (Mummy-Papa ke naam jodein)
+            </label>
+        </div>
 
         <div class="row g-2">
             <div class="col-6">
@@ -70,9 +79,33 @@
         <button onclick="generateName()" class="btn-generate">✨ Generate Name</button>
         
         <div id="result" class="result-box">
-            <div id="displayName" class="name-text"></div>
-            <div id="displayMeaning" class="meaning-text"></div>
-            <button id="saveBtn" class="btn-save" onclick="saveToWatchlist()">❤️ Save to Watchlist</button>
+            <div id="displayName"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="trending-title">🔥 Trending Names 2026</h5>
+        <div class="row">
+            <div class="col-6">
+                <h6 class="text-primary text-center">👦 Boys</h6>
+                <ul class="trending-list">
+                    <li>1. Aarav (आरव)</li>
+                    <li>2. Zayn (زین)</li>
+                    <li>3. Vihaan (विहान)</li>
+                    <li>4. Ayaan (ایان)</li>
+                    <li>5. Kian (कियान)</li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <h6 class="text-danger text-center">👧 Girls</h6>
+                <ul class="trending-list">
+                    <li>1. Kiara (कियारा)</li>
+                    <li>2. Zara (زہرا)</li>
+                    <li>3. Aadhya (आध्या)</li>
+                    <li>4. Inaya (عنایہ)</li>
+                    <li>5. Myra (मायरा)</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -81,69 +114,136 @@
             <h5 class="watchlist-title">❤️ My Watchlist</h5>
             <button class="clear-btn" onclick="clearWatchlist()">Clear All</button>
         </div>
-        <div id="watchlistContainer">
-            </div>
+        <div id="watchlistContainer"></div>
     </div>
 
     <div class="card affiliate-box">
         <p style="margin-bottom: 10px; font-size: 14px; color: #555; font-weight: bold;">🎁 Recommended for your Baby:</p>
-        <a href="YAHAN_APNA_AFFILIATE_LINK_DAALEIN" target="_blank" class="affiliate-link">🛒 Buy Best Baby Products</a>
+        <a href="store.html" class="affiliate-link">🛒 Buy Best Baby Products</a>
     </div>
 
 </div>
 
 <script>
-    // Name aur Meaning ka Database
     const nameDatabase = {
         "hindu": {
-            "boy": [{n: "Aarav (आरव)", m: "Peaceful (शांति)"}, {n: "Vihaan (विहान)", m: "Dawn, Morning (सुबह)"}, {n: "Aditya (आदित्य)", m: "The Sun (सूर्य)"}],
-            "girl": [{n: "Aadhya (आध्या)", m: "First Power (प्रथम शक्ति)"}, {n: "Kiara (कियारा)", m: "Little dark one (गहरी और सुंदर)"}, {n: "Diya (दिया)", m: "Light, Lamp (रोशनी)"}]
+            "boy": [{n: "Aarav (आरव)", m: "Peaceful"}, {n: "Vihaan (विहान)", m: "Dawn"}, {n: "Aditya (आदित्य)", m: "The Sun"}, {n: "Kabir (कबीर)", m: "Great"}, {n: "Reyansh (रेयांश)", m: "Ray of light"}],
+            "girl": [{n: "Aadhya (आध्या)", m: "First Power"}, {n: "Kiara (कियारा)", m: "Little dark one"}, {n: "Diya (दिया)", m: "Light"}, {n: "Ananya (अनन्या)", m: "Unique"}, {n: "Saisha (साइशा)", m: "Meaning of life"}]
         },
         "muslim": {
-            "boy": [{n: "Ayaan (ایان)", m: "Gift of God (अल्लाह का तोहफा)"}, {n: "Zayn (زین)", m: "Beauty, Grace (खूबसूरती)"}, {n: "Rehan (ریحان)", m: "Scented, Fragrant (सुगंधित)"}],
-            "girl": [{n: "Zara (زہرا)", m: "Blooming Flower (खिलता हुआ फूल)"}, {n: "Fatima (فاطمہ)", m: "Captivating (आकर्षक)"}, {n: "Inaya (عنایہ)", m: "Concern, Solicitude (परवाह)"}]
+            "boy": [{n: "Ayaan (ایان)", m: "Gift of God"}, {n: "Zayn (زین)", m: "Beauty, Grace"}, {n: "Rehan (ریحان)", m: "Scented"}, {n: "Samir (سمیر)", m: "Entertaining companion"}, {n: "Zaid (زید)", m: "Growth, Abundance"}],
+            "girl": [{n: "Zara (زہرا)", m: "Blooming Flower"}, {n: "Fatima (فاطمہ)", m: "Captivating"}, {n: "Inaya (عنایہ)", m: "Concern"}, {n: "Aayat (آیت)", m: "Sign, Miracle"}, {n: "Noor (نور)", m: "Light"}]
         },
         "christian": {
-            "boy": [{n: "Ethan", m: "Strong, Firm"}, {n: "Liam", m: "Strong-willed warrior"}],
-            "girl": [{n: "Sophia", m: "Wisdom"}, {n: "Olivia", m: "Olive Tree"}]
+            "boy": [{n: "Ethan", m: "Strong, Firm"}, {n: "Liam", m: "Strong-willed warrior"}, {n: "Noah", m: "Rest, Comfort"}, {n: "Lucas", m: "Bringer of light"}, {n: "Mason", m: "Worker in stone"}],
+            "girl": [{n: "Sophia", m: "Wisdom"}, {n: "Olivia", m: "Olive Tree"}, {n: "Emma", m: "Universal"}, {n: "Ava", m: "Life"}, {n: "Mia", m: "Mine, Bitter"}]
         },
         "modern": {
-            "boy": [{n: "Aryan (आर्यन)", m: "Noble (कुलीन)"}, {n: "Zian (ज़ियान)", m: "Self-peace (आत्म-शांति)"}],
-            "girl": [{n: "Ria (रिया)", m: "Singer (गायिका)"}, {n: "Sia (सिया)", m: "Moving (गतिशील)"}]
+            "boy": [{n: "Aryan", m: "Noble"}, {n: "Zian", m: "Self-peace"}, {n: "Kian", m: "Grace of God"}, {n: "Vivaan", m: "Full of life"}, {n: "Neev", m: "Foundation"}],
+            "girl": [{n: "Ria", m: "Singer"}, {n: "Sia", m: "Moving"}, {n: "Myra", m: "Beloved"}, {n: "Nyra", m: "Rose"}, {n: "Tara", m: "Star"}]
         }
     };
 
-    let currentGeneratedName = "";
-    let currentGeneratedMeaning = "";
-
-    function generateName() {
-        let religion = document.getElementById("religion").value;
-        let gender = document.getElementById("gender").value;
-        
-        let namesList = nameDatabase[religion][gender];
-        let randomIndex = Math.floor(Math.random() * namesList.length);
-        let selectedData = namesList[randomIndex];
-        
-        currentGeneratedName = selectedData.n;
-        currentGeneratedMeaning = selectedData.m;
-        
-        // Screen par print karna
-        document.getElementById("displayName").innerHTML = currentGeneratedName;
-        document.getElementById("displayMeaning").innerHTML = "Meaning: " + currentGeneratedMeaning;
-        
-        // Save button dikhana
-        document.getElementById("saveBtn").style.display = "inline-block";
+    function capitalizeFirstLetter(string) {
+        if (!string) return "";
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
 
-    function saveToWatchlist() {
-        if(currentGeneratedName === "") return;
-        
+    window.addDirectlyToWatchlist = function(name, meaning) {
         let container = document.getElementById("watchlistContainer");
         let div = document.createElement("div");
         div.className = "watchlist-item";
-        div.innerHTML = "<b>" + currentGeneratedName + "</b> - " + currentGeneratedMeaning;
-        
+        div.innerHTML = "<b>" + decodeURIComponent(name) + "</b> - " + decodeURIComponent(meaning);
         container.appendChild(div);
+        alert(decodeURIComponent(name) + " has been added to your Watchlist! ❤️");
+    }
+
+    function createNameCard(name, meaning) {
+        let encodedName = encodeURIComponent(name);
+        let encodedMeaning = encodeURIComponent(meaning);
+        let html = "<div class='name-container' onclick='addDirectlyToWatchlist(\"" + encodedName + "\", \"" + encodedMeaning + "\")'>";
+        html += "<div class='name-text'>" + name + "</div>";
+        html += "<small class='text-muted'>" + meaning + "</small><br>";
+        html += "<span style='font-size:12px; color:#ff4757; font-weight:bold;'>❤️ Tap to Save</span></div>";
+        return html;
+    }
+
+    function searchName() {
+        let query = document.getElementById("searchInput").value.trim().toLowerCase();
+        let displayArea = document.getElementById("displayName");
+        displayArea.innerHTML = "";
+
+        if (query === "") {
+            displayArea.innerHTML = "<div class='text-danger'>Please enter a name to search.</div>";
+            return;
+        }
+
+        let foundNames = [];
+        for (let religion in nameDatabase) {
+            for (let gender in nameDatabase[religion]) {
+                let list = nameDatabase[religion][gender];
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].n.toLowerCase().includes(query) || list[i].m.toLowerCase().includes(query)) {
+                        foundNames.push(list[i]);
+                    }
+                }
+            }
+        }
+
+        if (foundNames.length > 0) {
+            let html = "<div class='text-success mb-2'>Search Results:</div>";
+            foundNames.forEach(item => {
+                html += createNameCard(item.n, item.m);
+            });
+            displayArea.innerHTML = html;
+        } else {
+            displayArea.innerHTML = "<div class='text-danger'>Sorry, name not found in our database.</div>";
+        }
+    }
+
+    function generateName() {
+        let isCombineChecked = document.getElementById("combineCheck").checked;
+        let father = document.getElementById("fatherName").value.trim().toLowerCase();
+        let mother = document.getElementById("motherName").value.trim().toLowerCase();
+        let displayArea = document.getElementById("displayName");
+        displayArea.innerHTML = ""; 
+
+        if (isCombineChecked && father.length >= 3 && mother.length >= 3) {
+            let fLen = father.length;
+            let mLen = mother.length;
+            
+            let combinations = [
+                capitalizeFirstLetter(father.substring(0, 2) + mother.substring(Math.max(0, mLen - 3))),
+                capitalizeFirstLetter(mother.substring(0, 2) + father.substring(Math.max(0, fLen - 3))),
+                capitalizeFirstLetter(father.substring(0, 3) + mother.substring(Math.max(0, mLen - 2))),
+                capitalizeFirstLetter(mother.substring(0, 3) + father.substring(Math.max(0, fLen - 2)))
+            ];
+            let uniqueCombos = [...new Set(combinations)];
+
+            let html = "<div class='text-primary mb-2' style='font-weight:bold;'>Suggested Combinations:</div>";
+            uniqueCombos.forEach(combo => {
+                let meaning = "Logical blend of parent names"; 
+                html += createNameCard(combo, meaning);
+            });
+            displayArea.innerHTML = html;
+            
+        } else if (isCombineChecked && (father.length < 3 || mother.length < 3)) {
+             displayArea.innerHTML = "<div class='text-danger'>Please enter at least 3 letters for both names to combine.</div>";
+             return;
+        } else {
+            let religion = document.getElementById("religion").value;
+            let gender = document.getElementById("gender").value;
+            let namesList = nameDatabase[religion][gender];
+            
+            let shuffledList = [...namesList].sort(() => 0.5 - Math.random());
+            let selectedNames = shuffledList.slice(0, 5);
+            
+            let html = "<div class='text-primary mb-2' style='font-weight:bold;'>Suggested Names:</div>";
+            selectedNames.forEach(item => {
+                html += createNameCard(item.n, item.m);
+            });
+            displayArea.innerHTML = html;
+        }
     }
 
     function clearWatchlist() {
